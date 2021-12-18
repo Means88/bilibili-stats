@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { fetchBiliBili } from '../data/bilibili';
-import { bilibiliCard } from '../render/bilibili';
+import { fetchBiliBili } from '../../data/bilibili';
+import { bilibiliCard } from '../../render/bilibili';
 
 export default async function handler(
   req: NextApiRequest,
