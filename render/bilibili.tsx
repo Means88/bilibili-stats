@@ -132,6 +132,7 @@ export const bilibiliCard = ({
         stroke="#e4e2e2"
         width="494"
         stroke-opacity="1"
+        fill="#fffefe"
       />
 
 
