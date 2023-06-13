@@ -1,41 +1,50 @@
-import axios, { AxiosRequestHeaders } from 'axios';
+import biliAPI from 'bili-api'
+import got from 'got'
 
-const headers: AxiosRequestHeaders = {
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.123 Safari/537.36',
-  'sec-ch-ua': '"Chromium";v="104", " Not A;Brand";v="99", "Sidekick";v="104"',
-  'sec-ch-ua-mobile': '?0',
-  'sec-ch-ua-platform': "macOS",
-  'sec-fetch-dest': 'document',
-  'sec-fetch-mode': 'navigate',
-  'sec-fetch-site': 'none',
-  'sec-fetch-user': '?1',
-  'upgrade-insecure-requests': '1',
+const parseBSON = (data: any) => {
+  const chunks = data.split('}{"code":')
+  if (chunks.length === 1) {
+    return data
+  }
+  return chunks.map((chunk: any, index: number) => {
+    if (index === 0) {
+      return chunk + '}'
+    }
+    return '{"code":' + chunk
+  })[1]
 }
 
-if (process.env.COOKIE) {
-  headers.cookie = process.env.COOKIE
-}
+export async function fetchBiliBili(uid: string, mine = false): Promise<BiliBiliStats> {
+  const defaultGot = async ({ url, cookie = { buvid: 233 } }: any) => {
+    const biliCookie = (() => {
+      const defaultCookie: string = Object.entries({ _uuid: '', rpdid: '', ...cookie }).map(([k, v]) => `${k}=${v}`).join(';')
+      if (!mine) {
+        return defaultCookie
+      }
+      return process.env.COOKIE ?? defaultCookie
+    })()
+    const raw = await got(new URL(url), {
+      headers: {
+        Origin: 'https://www.bilibili.com',
+        Cookie: process.env.COOKIE ?? biliCookie,
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15'
+      }
+    }).text()
 
-const request = axios.create({
-  headers,
-})
+    return JSON.parse(parseBSON(raw))
+  }
 
-export async function fetchBiliBili(uid: string): Promise<BiliBiliStats> {
-  const t = await Promise.all([
-    request.get('https://api.bilibili.com/x/space/arc/search', { params: { mid: uid } }),
-    request.get('https://api.bilibili.com/x/space/acc/info', { params: { mid: uid } }),
-    request.get('https://api.bilibili.com/x/relation/stat', { params: { vmid: uid } }),
-  ]);
-  const res = t.map(x => x.data.data);
-  console.log(res[1])
+  const results = await biliAPI({ mid: uid }, ['video', 'stat', 'info', 'upstat'], {
+    got: defaultGot,
+  })
   return {
-    username: res[1].name,
-    followers: res[2].follower,
-    followings: res[2].following,
-    recentViews: res[0].list.vlist.reduce((sum: number, v: any) => sum + v.play, 0),
-    videos: res[0].page.count,
-    description: res[1].sign,
-    level: res[1].level,
+    username: results?.info?.data?.name ?? '',
+    followers: results?.stat?.data?.follower ?? 0,
+    followings: results?.stat?.data?.following ?? 0,
+    recentViews: results?.upstat?.data?.archive?.view ?? 0,
+    videos: results?.video ?? 0,
+    description: results?.info?.data?.sign ?? '',
+    level: results?.info?.data?.level ?? 0,
   };
 }
 
