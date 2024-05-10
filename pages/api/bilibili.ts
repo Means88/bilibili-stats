@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   if (!req.query.uid) {
-    return res.status(400);
+    return res.status(400).send('Bad Request');
   }
   const data = await fetchBiliBili(req.query.uid as string, req.query.uid === process.env.BILIBILI_UID);
   res.status(200).setHeader('content-type', 'image/svg+xml').send(bilibiliCard(data));
