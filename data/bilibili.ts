@@ -53,10 +53,11 @@ export async function fetchBiliBili(
 
     const raw = await got(new URL(url), {
       headers: {
-        Origin: "https://www.bilibili.com",
-        Cookie: process.env.COOKIE ?? biliCookie,
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15",
+        referer: "https://www.bilibili.com/",
+        origin: "https://www.bilibili.com",
+        cookie: process.env.COOKIE ?? biliCookie,
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       },
     }).text();
 
@@ -65,7 +66,12 @@ export async function fetchBiliBili(
 
   const results = await biliAPI(
     { mid: uid },
-    ["video", "stat", "info", "upstat"],
+    [
+      "video",
+      "stat",
+      "info",
+      "upstat"
+    ],
     {
       got: catchError(defaultGot),
     }
