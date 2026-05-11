@@ -2,3 +2,7 @@ name = "bilibili-stats"
 main = "src/index.ts"
 compatibility_date = "2026-05-11"
 workers_dev = true
+
+[observability.logs]
+enabled = false
+invocation_logs = true
