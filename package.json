@@ -1,25 +1,17 @@
 {
   "name": "bilibili-stats",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "wrangler dev",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "axios": "^0.24.0",
-    "bili-api": "^1.10.1",
-    "got": "^13.0.0",
-    "next": "12.0.7",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "17.0.0",
-    "@types/react": "17.0.37",
-    "eslint": "8.5.0",
-    "eslint-config-next": "12.0.7",
-    "typescript": "4.5.4"
+    "@cloudflare/workers-types": "^4.20260511.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.90.0"
   }
 }
