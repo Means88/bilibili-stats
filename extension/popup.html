@@ -15,30 +15,55 @@
         <input id="githubToken" type="password" autocomplete="off" />
       </label>
 
-      <label>
-        Gist ID
-        <input id="gistId" type="text" autocomplete="off" placeholder="Created automatically if empty" />
-      </label>
+      <section>
+        <h2>Stats card</h2>
+
+        <label>
+          Stats Gist ID
+          <input id="gistId" type="text" autocomplete="off" placeholder="Created automatically if empty" />
+        </label>
+
+        <label>
+          UID
+          <input id="uid" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+
+        <label>
+          Stats Gist file
+          <input id="fileName" type="text" autocomplete="off" value="bilibili-stats.json" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Latest videos</h2>
+
+        <label>
+          Videos Gist ID
+          <input id="videosGistId" type="text" autocomplete="off" placeholder="Created automatically if empty" />
+        </label>
+
+        <label>
+          Video count
+          <input id="videosCount" type="number" min="1" max="20" inputmode="numeric" value="5" />
+        </label>
+      </section>
 
       <label>
-        UID
-        <input id="uid" type="text" inputmode="numeric" autocomplete="off" />
-      </label>
-
-      <label>
-        Gist file
-        <input id="fileName" type="text" autocomplete="off" value="bilibili-stats.json" />
-      </label>
-
-      <label class="checkbox">
+        <span class="checkbox">
         <input id="publicGist" type="checkbox" checked />
-        Public gist
+        Public gist for new Gists
+        </span>
       </label>
 
       <div class="actions">
         <button id="saveSettings" type="button">Save</button>
-        <button id="syncGist" type="button">Collect & sync</button>
+        <button id="syncGist" type="button">Sync stats</button>
+        <button id="syncVideosGist" type="button">Sync videos</button>
+        <button id="exportConfig" type="button">Export config</button>
+        <button id="importConfig" type="button">Import config</button>
       </div>
+
+      <input id="configFile" class="hidden-file" type="file" accept="application/json,.json" />
 
       <p id="hint"></p>
       <pre id="status"></pre>

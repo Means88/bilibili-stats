@@ -20,11 +20,13 @@ The Worker does not call Bilibili directly. Use the Chrome extension in `extensi
 2. Enable Developer mode.
 3. Load unpacked and select the `extension/` directory.
 4. Open a Bilibili space page.
-5. Open the extension popup, set your GitHub token, UID, and optional existing Gist ID.
-6. Click `Collect & sync`.
-7. Use the saved Gist ID in `/api/bilibili?gist={GIST_ID}`.
+5. Open the extension popup, set your GitHub token, UID, and optional existing Gist IDs.
+6. Click `Sync stats` for the card data Gist.
+7. Click `Sync videos` for the latest videos Gist.
+8. Use the saved stats Gist ID in `/api/bilibili?gist={GIST_ID}`.
 
 The extension cannot read `.env`; paste the GitHub token into the popup once and it will be saved in Chrome extension storage.
+Use `Export config` and `Import config` to move extension settings between browser profiles.
 
 The extension writes `bilibili-stats.json` with this shape:
 
@@ -43,6 +45,19 @@ The extension writes `bilibili-stats.json` with this shape:
     "description": ""
   }
 }
+```
+
+The latest videos sync writes two files to the configured videos Gist:
+
+```text
+latest_videos
+latest_videos.md
+```
+
+`latest_videos` is plain text and `latest_videos.md` contains Markdown links, matching this format:
+
+```markdown
+[Video title](https://www.bilibili.com/video/BV...) ▶️:0.3k :11
 ```
 
 ## Development
