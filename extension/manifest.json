@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Bilibili Stats Gist Sync",
+  "version": "1.0.0",
+  "description": "Collect sanitized Bilibili stats from the current Bilibili page and save them to a GitHub Gist.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://space.bilibili.com/*",
+    "https://www.bilibili.com/*",
+    "https://api.github.com/*"
+  ],
+  "action": {
+    "default_title": "Bilibili Stats",
+    "default_popup": "popup.html"
+  }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bilibili Stats</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Bilibili Stats</h1>
+
+      <label>
+        GitHub token
+        <input id="githubToken" type="password" autocomplete="off" />
+      </label>
+
+      <label>
+        Gist ID
+        <input id="gistId" type="text" autocomplete="off" placeholder="Created automatically if empty" />
+      </label>
+
+      <label>
+        UID
+        <input id="uid" type="text" inputmode="numeric" autocomplete="off" />
+      </label>
+
+      <label>
+        Gist file
+        <input id="fileName" type="text" autocomplete="off" value="bilibili-stats.json" />
+      </label>
+
+      <label class="checkbox">
+        <input id="publicGist" type="checkbox" checked />
+        Public gist
+      </label>
+
+      <div class="actions">
+        <button id="saveSettings" type="button">Save</button>
+        <button id="syncGist" type="button">Collect & sync</button>
+      </div>
+
+      <p id="hint"></p>
+      <pre id="status"></pre>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

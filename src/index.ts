@@ -1,17 +1,8 @@
-import { fetchBiliBili, type Env } from "./bilibili";
+import { fetchBiliBiliFromGist, type Env } from "./bilibili";
 import { bilibiliCard } from "./svg";
 
 const ENDPOINT_PATH = "/api/bilibili";
-const NUMERIC_UID_PATTERN = /^\d+$/;
-
-function parseAllowedUidList(value: string | undefined): Set<string> {
-  return new Set(
-    (value ?? "")
-      .split(",")
-      .map((uid) => uid.trim())
-      .filter(Boolean),
-  );
-}
+const GIST_ID_PATTERN = /^[a-zA-Z0-9]+$/;
 
 export default {
   async fetch(request, env): Promise<Response> {
@@ -30,20 +21,28 @@ export default {
       });
     }
 
-    const uid = url.searchParams.get("uid")?.trim();
-    if (!uid) {
+    const gistId = url.searchParams.get("gist")?.trim();
+    if (!gistId) {
       return new Response("Bad Request", { status: 400 });
     }
 
-    if (!NUMERIC_UID_PATTERN.test(uid)) {
+    if (!GIST_ID_PATTERN.test(gistId)) {
       return new Response("Bad Request", { status: 400 });
     }
 
-    if (env.ALLOWED_UID_LIST && !parseAllowedUidList(env.ALLOWED_UID_LIST).has(uid)) {
-      return new Response("Forbidden", { status: 403 });
+    let data;
+    try {
+      data = await fetchBiliBiliFromGist(gistId, env);
+    } catch (error) {
+      console.error(error);
+      return new Response("Bad Gateway", {
+        status: 502,
+        headers: {
+          "cache-control": "no-store",
+        },
+      });
     }
 
-    const data = await fetchBiliBili(uid, env);
     const body = request.method === "HEAD" ? null : bilibiliCard(data);
 
     return new Response(body, {
