@@ -48,7 +48,7 @@ export default {
 
     return new Response(body, {
       headers: {
-        "cache-control": "public, max-age=600",
+        "cache-control": "public, max-age=3600",
         "content-type": "image/svg+xml; charset=utf-8",
       },
     });
