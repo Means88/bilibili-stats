@@ -1,6 +1,6 @@
 # BiliBili Stats
 
-Cloudflare Worker exposing a single SVG endpoint:
+Cloudflare Worker exposing Bilibili SVG and JSON Feed endpoints:
 
 ```markdown
 ![](https://<your-worker-host>/api/bilibili?gist={GIST_ID})
@@ -12,6 +12,14 @@ Example:
 GET /api/bilibili?gist=0123456789abcdef0123456789abcdef
 ```
 
+The same Gist can expose the homepage JSON Feed file:
+
+```text
+GET /api/bilibili.json?gist=0123456789abcdef0123456789abcdef
+```
+
+The JSON Feed response includes permissive CORS headers for browser clients.
+
 ## Chrome Extension
 
 The Worker does not call Bilibili directly. Use the Chrome extension in `extension/` to collect stats from an open Bilibili page and save sanitized JSON to a GitHub Gist.
@@ -21,8 +29,8 @@ The Worker does not call Bilibili directly. Use the Chrome extension in `extensi
 3. Load unpacked and select the `extension/` directory.
 4. Open a Bilibili space page.
 5. Open the extension popup, set your GitHub token, UID, and optional existing Gist IDs.
-6. Click `Sync stats` for the card data Gist.
-7. Click `Sync videos` for the latest videos Gist.
+6. If the Gist ID fields are empty, click `Scan Gists` to match existing Gists by file name.
+7. Click `Sync all` to update the stats Gist and latest videos Gist.
 8. Use the saved stats Gist ID in `/api/bilibili?gist={GIST_ID}`.
 
 The extension cannot read `.env`; paste the GitHub token into the popup once and it will be saved in Chrome extension storage.
@@ -46,6 +54,8 @@ The extension writes `bilibili-stats.json` with this shape:
   }
 }
 ```
+
+The same stats Gist also receives `bilibili.json`, a JSON Feed payload for the homepage videos section.
 
 The latest videos sync writes two files to the configured videos Gist:
 
